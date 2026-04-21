@@ -18,13 +18,14 @@ foram selecionados para compor o corpus final. Este valor pode ser modificado al
 
 
 Subsequentemente, todos os documentos selecionados foram submetidos ao processo de
-fragmentação em blocos de texto (chunking), sendo divididos em segmentos de 3500
-caracteres. Para preservar a continuidade semântica entre os blocos e mitigar a perda
-de contexto nas extremidades, foi aplicada uma sobreposição (overlap) de 350 caracteres
-entre os blocos consecutivos. Esta configuração de sobreposição visa garantir a integridade
-da informação e a coesão semântica para a posterior recuperação de informações. Para
-garantir a rastreabilidade e evitar a perda de informações decorrentes de falhas no fluxo,
-todos os chunks gerados foram persistidos em um único arquivo JSON dentro do diretório "chunks". 
+fragmentação em blocos de texto (chunking), sendo divididos em segmentos conformo configuração
+estabelecia no atributo  **list_splitting_parameters**. Apesar do padrão de valores estar fixado em
+500, 1000,2000, 4000, 8000 tokens e divisão semântica automática,  eles podem ser alterados conforme desejado. 
+Para preservar a continuidade semântica entre os blocos e mitigar a perda de contexto nas extremidades, 
+foi aplicada uma sobreposição (overlap),  10% do tamanho dos fragmentos, entre os blocos consecutivos. Esta configuração de 
+sobreposição visa garantir a integridade da informação e a coesão semântica para a posterior recuperação 
+de informações. Para garantir a rastreabilidade e evitar a perda de informações decorrentes de falhas no 
+fluxo, todos os chunks gerados foram persistidos em um único arquivo JSON dentro do diretório "chunks". 
 O arquivo JSON foi estruturado conforme a seguir: id (identificação crescente), source (fonte) e chunks (lista contendo os fragmentos).
 Essa medida de backup preserva a totalidade do conteúdo fragmentado, mantendo a informação de qual
 manual cada chunk foi derivado.
