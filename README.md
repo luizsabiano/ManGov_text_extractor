@@ -2,33 +2,27 @@
 Extrai texto dos manuais normativos governamentais e persiste no banco de dados vetorial
 
 
-# <p style="text-align:center;"> Ferramenta de extração e fragmentação de texto em manuais normativos governamentais</p> 
-
 ---
-## Resumo do utilitário
-
 <p style="text-align:justify;">
 
-Utilitário de extração e fragmentação contruído para, a partir do diretório raiz, ler os arquivos armazenados dentro do diretório "data/manuals_content", extrair o conteúdo destes arquivos e fragmentá-los. Após a fragmentação, os fragmentos extraído são persistidos em arquivos Json com o nome chunk_list_comprimento-do-fragmento.json.
+## 🛠️ Funcionamento do Utilitário
 
-Com o objetivo de excluir anexos, fluxogramas, tabelas e figuras, bem como conteúdos de baixa densidade informacional, implementou-se um filtro com
-base na quantidade de palavras que compunham o documento. Desta forma, apenas
-arquivos contendo uma quantidade de texto igual ou superior a 1000 palavras (tokens)
-foram selecionados para compor o corpus final. Este valor pode ser modificado alterando a varíavel "min_tokens_per_docs" em src/get_chunks.py.
+Este utilitário foi construído para automatizar a leitura, extração, fragmentação e geração de perguntas e respostas sintéticas a partir de manuais normativos governamentais armazenados localmente. O fluxo de execução é dividido nas seguintes etapas:
 
 
-Subsequentemente, todos os documentos selecionados foram submetidos ao processo de
-fragmentação em blocos de texto (chunking), sendo divididos em segmentos conformo configuração
-estabelecia no atributo  **list_splitting_parameters**. Apesar do padrão de valores estar fixado em
-500, 1000,2000, 4000, 8000 tokens e divisão semântica automática,  eles podem ser alterados conforme desejado. 
-Para preservar a continuidade semântica entre os blocos e mitigar a perda de contexto nas extremidades, 
-foi aplicada uma sobreposição (overlap),  10% do tamanho dos fragmentos, entre os blocos consecutivos. Esta configuração de 
-sobreposição visa garantir a integridade da informação e a coesão semântica para a posterior recuperação 
-de informações. Para garantir a rastreabilidade e evitar a perda de informações decorrentes de falhas no 
-fluxo, todos os chunks gerados foram persistidos em um único arquivo JSON dentro do diretório "chunks". 
-O arquivo JSON foi estruturado conforme a seguir: id (identificação crescente), source (fonte) e chunks (lista contendo os fragmentos).
-Essa medida de backup preserva a totalidade do conteúdo fragmentado, mantendo a informação de qual
-manual cada chunk foi derivado.
+### 1. Extração e Filtragem de Conteúdo
+A partir do diretório raiz, o script lê os arquivos dentro de `data/manuals_content/` e extrai seus conteúdos textuais. Para mitigar ruídos como anexos, fluxogramas, tabelas e figuras (bem como conteúdos de baixa densidade informacional), implementou-se um filtro baseado na quantidade de palavras.
+* **Regra:** Apenas arquivos contendo uma quantidade igual ou superior a 1000 palavras (*tokens*) são selecionados para compor o *corpus* final.
+* **Customização:** Esse limite pode ser modificado alterando a variável `min_tokens_per_docs` no arquivo `src/get_chunks.py`.
+
+### 2. Fragmentação (*Chunking*)
+Os documentos aprovados no filtro são submetidos ao processo de fragmentação em blocos de texto (*chunks*).
+* **Parâmetros:** A divisão em segmentos segue a configuração estabelecida no atributo `list_splitting_parameters` (o padrão atual está fixado em 3500 *tokens*).
+* **Continuidade Semântica:** Para evitar a perda de contexto nas extremidades dos blocos, foi aplicada uma sobreposição (*overlap*) de 10% do tamanho total do fragmento entre blocos consecutivos.
+* **Persistência e Backup:** Para garantir a rastreabilidade, todos os *chunks* gerados são persistidos em um arquivo JSON único dentro do diretório `chunks/`, nomeado como `chunk_list_comprimento-do-fragmento.json`. A estrutura do arquivo contém:
+  * `id`: Identificação numérica crescente.
+  * `source`: Fonte original do manual.
+  * `chunks`: Lista contendo os fragmentos extraídos.
 
 </p>
 
